@@ -107,29 +107,25 @@ async function run() {
     //     res.send(result)
     // })
 
-    // myexports API
-    // app.get('/myexports',async(req,res)=>{
-    //     const email = req.query.email
-    //     console.log(email)
-    //     const query ={}
-    //     if (email) {
-    //         query.email=email
-    //     }
-    //     const cursor = MyExportCollection.find(query);
-    //   const result = await cursor.toArray();
-    //   res.send(result);
-    // })
-
     // MyExports post API
     app.post("/myexports", async (req, res) => {
       const exportsMyProducts = req.body;
       const result = await MyExportCollection.insertOne(exportsMyProducts);
-      res.send(result);
+       const allProductsResult = await productCollection.insertOne(exportsMyProducts);
+
+      res.send({result,allProductsResult});
+      console.log(result,allProductsResult)
     });
 
     // MyExports get API
     app.get("/myexports", async (req, res) => {
-      const cursor = MyExportCollection.find({});
+        const email = req.query.email
+        console.log(email)
+        const query ={}
+        if (email) {
+            query.email=email
+        }
+      const cursor = MyExportCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
     });
