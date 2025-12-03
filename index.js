@@ -175,6 +175,8 @@ async function run() {
 }
 run().catch(console.dir);
 
-app.listen(port, () => {
-  console.log(`Import Export Hub server app listening on port ${port}`);
-});
+module.exports = app;
+
+// app.listen(port, () => {
+//   console.log(`Import Export Hub server app listening on port ${port}`);
+// });
