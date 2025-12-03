@@ -116,13 +116,13 @@ async function run() {
       );
 
       res.send({ result, allProductsResult });
-      console.log(result, allProductsResult);
+    //   console.log(result, allProductsResult);
     });
 
     // MyExports get API
     app.get("/myexports", async (req, res) => {
       const email = req.query.email;
-      console.log(email);
+    //   console.log(email);
       const query = {};
       if (email) {
         query.email = email;
@@ -167,9 +167,9 @@ async function run() {
     });
 
     await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+    // console.log(
+    //   "Pinged your deployment. You successfully connected to MongoDB!"
+    // );
   } finally {
   }
 }
