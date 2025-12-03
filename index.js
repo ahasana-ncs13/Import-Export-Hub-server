@@ -166,7 +166,7 @@ async function run() {
       res.send(result, myExportDoc, allProductsResult);
     });
 
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     // console.log(
     //   "Pinged your deployment. You successfully connected to MongoDB!"
     // );
@@ -177,6 +177,6 @@ run().catch(console.dir);
 
 module.exports = app;
 
-// app.listen(port, () => {
-//   console.log(`Import Export Hub server app listening on port ${port}`);
-// });
+app.listen(port, () => {
+  console.log(`Import Export Hub server app listening on port ${port}`);
+});
