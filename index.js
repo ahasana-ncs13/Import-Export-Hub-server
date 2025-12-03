@@ -111,20 +111,22 @@ async function run() {
     app.post("/myexports", async (req, res) => {
       const exportsMyProducts = req.body;
       const result = await MyExportCollection.insertOne(exportsMyProducts);
-       const allProductsResult = await productCollection.insertOne(exportsMyProducts);
+      const allProductsResult = await productCollection.insertOne(
+        exportsMyProducts
+      );
 
-      res.send({result,allProductsResult});
-      console.log(result,allProductsResult)
+      res.send({ result, allProductsResult });
+      console.log(result, allProductsResult);
     });
 
     // MyExports get API
     app.get("/myexports", async (req, res) => {
-        const email = req.query.email
-        console.log(email)
-        const query ={}
-        if (email) {
-            query.email=email
-        }
+      const email = req.query.email;
+      console.log(email);
+      const query = {};
+      if (email) {
+        query.email = email;
+      }
       const cursor = MyExportCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
@@ -135,7 +137,33 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await MyExportCollection.deleteOne(query);
-      res.send(result);
+      const deleteAllProducts = await productCollection.deleteOne({ _id: new ObjectId(id) });
+      res.send({result,deleteAllProducts});
+    });
+
+    // MyExport update API
+    app.patch("/myexports/:id", async (req, res) => {
+      const id = req.params.id;
+      const updateProduct = req.body;
+      const query = { _id: new ObjectId(id) };
+      const update = {
+        $set: {
+          product_name: updateProduct.product_name,
+          product_images: updateProduct.product_images,
+          price_min: updateProduct.price_min,
+          price_max: updateProduct.price_max,
+          origin_country: updateProduct.origin_country,
+          rating: updateProduct.rating,
+          available_quantity: updateProduct.available_quantity,
+        },
+      };
+      const result = await MyExportCollection.updateOne(query, update);
+      const myExportDoc = await MyExportCollection.findOne(query);
+      const allProductsResult = await productCollection.updateOne(
+        { _id: new ObjectId(id) },
+        update
+      );
+      res.send(result, myExportDoc, allProductsResult);
     });
 
     await client.db("admin").command({ ping: 1 });
